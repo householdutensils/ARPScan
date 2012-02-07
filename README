@@ -1,0 +1,1 @@
+ARPScan.pl is a script that takes a single argument of a local interface. It then scans the directly connected subnet for hosts that respond to ARP Requests. 
