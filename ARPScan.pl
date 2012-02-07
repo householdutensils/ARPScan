@@ -1,11 +1,10 @@
 #!/bin/perl
 
 #################################################################################################
-# ARPScan															#
-# by RootSecks																			#
-#																					#
-# 																					#
-# Spams the network with ARP Requests and looks for replys, reply means existing hosts						#
+# ARPScan											#
+# by RootSecks											#
+#												#
+# Spams the network with ARP Requests and looks for replys, reply means existing hosts		#
 #################################################################################################
 
 use strict; #Use Strict because my coding style could be described as a "Disaster" and strict will catch some of the mistakes
