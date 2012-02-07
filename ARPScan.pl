@@ -1,11 +1,11 @@
 #!/bin/perl
 
 #################################################################################################
-# ARP Scan											#
-# by RootSecks											#
-#												#
-# 												#
-# Spams the network with ARP Requests and looks for replys, reply means existing hosts		#
+# Classless Network Scanner																#
+# by RootSecks																			#
+#																					#
+# 																					#
+# Spams the network with ARP Requests and looks for replys, reply means existing hosts						#
 #################################################################################################
 
 use strict; #Use Strict because my coding style could be described as a "Disaster" and strict will catch some of the mistakes
@@ -33,11 +33,22 @@ $dispatch = 0;
 #Global to hold found hosts
 my @foundhosts :shared;
 
-#Array to hold common TCP Ports
-my @tcpcommonports :shared = (20, 22, 23, 25, 80, 443, 445, 3389, 5900, 8008, 8080);
+$mac = '0x080027dce4d9';
 
+
+print "ARPScan \r\n";
+print "....................................\r\n";
+print "Interface: $ethinterface \r\n";
+print "IP Address: $ipaddress \r\n";
+print "Subnet Mask: $ipsubnet \r\n";
+
+
+print "Beginning ARP Scan \r\n";
 #ARP Scan
 &arp_scan;
+print "ARP Scan Completed \r\n\r\n";
+
+print "Located Hosts: \r\n";
 
 for (my $g = 0; $g <= $#foundhosts; $g++) {
 	
@@ -51,12 +62,13 @@ for (my $g = 0; $g <= $#foundhosts; $g++) {
 sub arp_scan {
 	
 
-	#Convert the src ip address to hex so we can pack it into the frames
-	my $srcipaddress = &get_hex_of_ip($ipaddress, 1);
+	
+#Convert the src ip address to hex so we can pack it into the frames
+my $srcipaddress = &get_hex_of_ip($ipaddress, 1);
 
 
-	#Get the network bits and the empty host bits and the legnth of the host bits from the ip address
-	my ($networkbits, $binaryhostbits, $hostlength) = &get_networkbits_from_ip($ipaddress, $ipsubnet);
+#Get the network bits and the empty host bits and the legnth of the host bits from the ip address
+my ($networkbits, $binaryhostbits, $hostlength) = &get_networkbits_from_ip($ipaddress, $ipsubnet);
 
 
 	#Initalize ethernet device
@@ -73,6 +85,8 @@ sub arp_scan {
 
 	#We calculate the maximum decimal possible based on the length of the host portion of the ip address ((2^length)-1) and we loop until we hit that
 	while ($hostbits <= ((2 ** $hostlength)-1)) {
+		
+		print "Scanning Host Number: $hostbits \r\n";
 		
 		#We take the host bits decimla and convert into binary
 		my $binaryhost = sprintf('%.*b',$hostlength, $hostbits);
@@ -120,7 +134,8 @@ sub arp_scan {
 
 	}
 
-
+	
+	print "Scanning Hosts completed, awaiting pcap thread to finish \r\n";
 
 	#Dispach complete
 	$dispatch = 1;
@@ -206,7 +221,7 @@ sub process_packet {
 			$ethertypeunpack = unpack ('H12', $lg);
 
 			#If its the listening machine
-			if (unpack ('H12', $lg) == sprintf('%x', 0x4061864e4439)) {
+			if (unpack ('H12', $lg) == sprintf('%x', hex $mac)) {
 				
 				#Then we care
 				$packetpickup = 1;
@@ -444,3 +459,7 @@ sub get_networkbits_from_ip {
 	return $networkbinaryip, $hostbinaryip, length $hostbinaryip;
 	
 }
+
+
+
+
