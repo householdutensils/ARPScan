@@ -1,16 +1,11 @@
 #!/bin/perl
 
 #################################################################################################
-# ARP Scan																			#
-# by RootSecks																			#
-#																					#
-# 																					#
-# 1> ARP Scan: Spams the network with ARP Requests and looks for replys, reply means existing hosts			#
-# 2> Ping Test: Ping each host found by ARP Scan													#
-# 3> TCP Port Scan: Fully complete TCP Handshake for common ports on each host							#
-# 4> Fingerprint Targets																	#
-# 5> DHCP Scan: Use up all the leases to find out what what IPs are dynamically assigned then release all the leases 	#
-#	Routers and other network kit will likley not be getting addresses from DHCP	(To be implemeneted later)		#
+# ARP Scan											#
+# by RootSecks											#
+#												#
+# 												#
+# Spams the network with ARP Requests and looks for replys, reply means existing hosts		#
 #################################################################################################
 
 use strict; #Use Strict because my coding style could be described as a "Disaster" and strict will catch some of the mistakes
